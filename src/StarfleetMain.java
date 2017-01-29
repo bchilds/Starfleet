@@ -3,7 +3,8 @@
  */
 public class StarfleetMain {
     public static void main(String[] args){
-            System.out.print((char) 65); //A
-            System.out.print((char) 97); //a
+        Inputs input = new Inputs();
+        Map testMap = new Map(input);
+        testMap.printMap();
     }
 }

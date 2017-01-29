@@ -15,27 +15,45 @@ public class Inputs {
     ArrayList<String> fields1 = new ArrayList<>();
     ArrayList<String> fields2 = new ArrayList<>();
 
-    public void CreateFields1(){
-        fields1.add("z");
+    public Inputs(){
+        createFields1();
+        createFields2();
     }
 
-    public void CreateFields2(){
-        fields2.add("..c..");
-        fields2.add("b....");
-        fields2.add(".z...");
+    public void createFields1(){
+        fields2.add("z");
     }
 
-    public ArrayList<Mine> GenerateMineList(ArrayList<String> list){
+    public void createFields2(){
+        fields1.add("..c..");
+        fields1.add("b....");
+        fields1.add(".z...");
+    }
+
+    public ArrayList<Mine> generateMineList(ArrayList<String> list){
         ArrayList<Mine> minesOut = new ArrayList<>();
 
-        for(String line: list){
+        //Iterate through all the list of strings handed to us from Init. i = Y coord
+        for(int i = 0; i<list.size(); i++){
             //logic to create a mine from any characters that are not '.'
-        }
+            String curString = list.get(i);
+
+            //Iterate through each character in this line. j = X coord
+            for(int j = 0; j<curString.length(); j++){
+                if(curString.charAt(j) != '.'){
+                    //create a new Mine with j as X-coord, i as Y-coord
+                    minesOut.add(new Mine(j,i,curString.charAt(j)));
+
+                    //debug to see mine coords as created
+                    //System.out.println(i + " , "  + j + " , " + curString.charAt(j));
+                }
+            }
+        } //end checking the initial list for mines to create
 
         return minesOut;
     }
 
-    public ArrayList<String> GenerateCommandList(){
+    public ArrayList<String> generateCommandList(){
         ArrayList<String> commandList = new ArrayList<>();
 
         //logic to generate command list from Script file

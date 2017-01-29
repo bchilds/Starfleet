@@ -12,6 +12,19 @@ public class Mine {
     private int z;
     private char c;
 
+    public Mine(int x, int y, char c){
+        setCoords(x, y, c);
+    }
+
+    @Override
+    public String toString(){
+        return "" + c;
+    }
+
+    public char getChar(){
+        return c;
+    }
+
     public void setCoords(int x, int y, char c){
         this.x = x;
         this.y = y;
@@ -25,7 +38,20 @@ public class Mine {
         }
     }
 
-    public void getCoords(){
-        //not actually void, gotta figure out the return type
+    public void decrementZ(){
+
+    }
+
+    public boolean checkPassed(){
+        if(this.z < 1){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public int[] getCoords(){
+        int[] tempCoords = {x,y};
+        return tempCoords;
     }
 }
