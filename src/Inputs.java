@@ -30,8 +30,14 @@ public class Inputs {
         fields1.add(".z...");
     }
 
+    public void loadFiles(){
+
+    }
+
     public ArrayList<Mine> generateMineList(ArrayList<String> list){
         ArrayList<Mine> minesOut = new ArrayList<>();
+        ArrayList<Integer> xes = new ArrayList<>();
+        ArrayList<Integer> yes = new ArrayList<>();
 
         //Iterate through all the list of strings handed to us from Init. i = Y coord
         for(int i = 0; i<list.size(); i++){
@@ -43,12 +49,23 @@ public class Inputs {
                 if(curString.charAt(j) != '.'){
                     //create a new Mine with j as X-coord, i as Y-coord
                     minesOut.add(new Mine(j,i,curString.charAt(j)));
+                    xes.add(j);
+                    yes.add(i);
 
                     //debug to see mine coords as created
                     //System.out.println(i + " , "  + j + " , " + curString.charAt(j));
                 }
             }
         } //end checking the initial list for mines to create
+
+        //TODO: Now, generate the ship center based on the initial mine list, then modify the mine list to be relative to ship
+        int[] dims = new int[4];
+        for(int i = 0; i < minesOut.size(); i++){
+
+        }
+        //now we have the dims of the minelist
+
+
 
         return minesOut;
     }
@@ -57,7 +74,15 @@ public class Inputs {
         ArrayList<String> commandList = new ArrayList<>();
 
         //logic to generate command list from Script file
+        commandList.add("BETA");
+        commandList.add("INCREMENT");
+        commandList.add("ALPHA");
+
+
 
         return commandList;
     }
+
+    //TODO method to interpret an input text file into a command list with appropriate case/increment
+
 }

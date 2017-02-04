@@ -6,5 +6,6 @@ public class StarfleetMain {
         Inputs input = new Inputs();
         Map testMap = new Map(input);
         testMap.printMap();
+        testMap.checkMines();
     }
 }

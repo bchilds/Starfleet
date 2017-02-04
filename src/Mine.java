@@ -11,9 +11,11 @@ public class Mine {
     private int y;
     private int z;
     private char c;
+    boolean destroyed;
 
     public Mine(int x, int y, char c){
         setCoords(x, y, c);
+        destroyed = false;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class Mine {
     }
 
     public void decrementZ(){
-
+        z--;
     }
 
     public boolean checkPassed(){
@@ -53,5 +55,9 @@ public class Mine {
     public int[] getCoords(){
         int[] tempCoords = {x,y};
         return tempCoords;
+    }
+
+    public void destroyMine(){
+        destroyed = true;
     }
 }
