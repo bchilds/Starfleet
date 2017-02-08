@@ -1,19 +1,23 @@
+package starfleet;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by BChilds on 1/27/17.
  */
 public class Inputs {
     /*
-    Inputs will take in two files: a "Field" file which defines the starting field using text characters, and
+    starfleet.Inputs will take in two files: a "Field" file which defines the starting field using text characters, and
     a "Script" file which provides a series of text strings equivalent to Enum commands.
-    Inputs should have a method to convert both of these into ArrayLists of Strings
+    starfleet.Inputs should have a method to convert both of these into ArrayLists of Strings
      */
 
     //For early testing, define two simple cases for Fields
 
-    ArrayList<String> fields1 = new ArrayList<>();
-    ArrayList<String> fields2 = new ArrayList<>();
+    public ArrayList<String> fields1 = new ArrayList<>();
+    public ArrayList<String> fields2 = new ArrayList<>();
+    int[] mapDims = new int[2];
 
     public Inputs(){
         createFields1();
@@ -47,7 +51,7 @@ public class Inputs {
             //Iterate through each character in this line. j = X coord
             for(int j = 0; j<curString.length(); j++){
                 if(curString.charAt(j) != '.'){
-                    //create a new Mine with j as X-coord, i as Y-coord
+                    //create a new starfleet.Mine with j as X-coord, i as Y-coord
                     minesOut.add(new Mine(j,i,curString.charAt(j)));
                     xes.add(j);
                     yes.add(i);
@@ -58,14 +62,22 @@ public class Inputs {
             }
         } //end checking the initial list for mines to create
 
-        //TODO: Now, generate the ship center based on the initial mine list, then modify the mine list to be relative to ship
-        int[] dims = new int[4];
+
+        int[] dims = new int[2];
+        dims[0] = Collections.max(xes) - Collections.min(xes); //gets the X dimension width
+        dims[1] = Collections.max(yes) - Collections.min(yes); //gets the Y dimension width
+
+        mapDims = Ship.centerShip(dims);
+        //these are the final dimensions of the initial map
+
+        //Now that the ship is at the center coords, we set all mine coords to be relative to ship
         for(int i = 0; i < minesOut.size(); i++){
 
+            Mine thisMine = minesOut.get(i); //now subtract center from mine
+            //ex: mine of (1,4) center of (2,2) will be a mine at (-1,2)
+            thisMine.setCoords(thisMine.getCoords()[0]-Ship.getCoords()[0],
+                    thisMine.getCoords()[1]-Ship.getCoords()[1],thisMine.getChar());
         }
-        //now we have the dims of the minelist
-
-
 
         return minesOut;
     }
@@ -74,9 +86,9 @@ public class Inputs {
         ArrayList<String> commandList = new ArrayList<>();
 
         //logic to generate command list from Script file
-        commandList.add("BETA");
-        commandList.add("INCREMENT");
-        commandList.add("ALPHA");
+        commandList.add("North");
+        commandList.add("Increment");
+        commandList.add("North");
 
 
 

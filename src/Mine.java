@@ -1,3 +1,5 @@
+package starfleet;
+
 /**
  * Created by BChilds on 1/27/17.
  */
@@ -11,7 +13,7 @@ public class Mine {
     private int y;
     private int z;
     private char c;
-    boolean destroyed;
+    public boolean destroyed;
 
     public Mine(int x, int y, char c){
         setCoords(x, y, c);
@@ -42,9 +44,31 @@ public class Mine {
 
     public void decrementZ(){
         z--;
+        if (z > 26){
+            c = (char) (z + 38);
+        } else {
+            c = (char) (z + 96);
+        }
+    }
+
+    public void incrementX(){
+        x++;
+    }
+
+    public void decrementX(){
+        x--;
+    }
+
+    public void incrementY(){
+        y++;
+    }
+
+    public void decrementY(){
+        y--;
     }
 
     public boolean checkPassed(){
+        //false means that the mine has been passed, true means the mine is not yet passed
         if(this.z < 1){
             return false;
         } else {

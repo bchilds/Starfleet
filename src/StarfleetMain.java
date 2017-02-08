@@ -1,3 +1,5 @@
+package starfleet;
+
 /**
  * Created by BChilds on 1/27/17.
  */
@@ -7,5 +9,6 @@ public class StarfleetMain {
         Map testMap = new Map(input);
         testMap.printMap();
         testMap.checkMines();
+        testMap.doAllCommands();
     }
 }
