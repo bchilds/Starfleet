@@ -31,6 +31,8 @@ public class Map {
     int[][] beta = new int[][] {{-1,0},{0,-1},{1,0},{0,1}};
     int[][] gamma = new int[][] {{-1,0},{0,0},{1,0}};
     int[][] delta = new int[][] {{0,1},{0,0},{0,-1}};
+    int shots = 0;
+    int moves = 0;
 
 
     //Constructor requires an Input
@@ -58,7 +60,7 @@ public class Map {
     public void printMap(){
         mapDimension = newMapDimensions();
         Ship.centerShip(mapDimension);   //centers the ship on the new dimensions
-        System.out.println("Map dims: " + Arrays.toString(mapDimension));
+        //System.out.println("Map dims: " + Arrays.toString(mapDimension));
 
         //create character array for map
         char[][] newMap = new char[mapDimension[1]][mapDimension[0]];
@@ -66,7 +68,7 @@ public class Map {
             Arrays.fill(newMap[i],'.'); //fills the map with '.'
         }
 
-        //get all the mine characters and print to map
+        //get all the mine characters and generate map
         for(Mine mine:mineArrayList){
             if(!mine.destroyed) {
                 //need to print mine in the spot relative to center
@@ -74,15 +76,14 @@ public class Map {
             }
         }
 
-        //TODO print map to output file?
-        //temporary - print map to console
+        //print map to console
         for(char[] lineY: newMap){  //goes through each char array in newMap, which = y-coord
             for(char c: lineY){     //goes through each char in a char array, which = x-coord
                 System.out.print(c);
             }
             System.out.print("\n");
         }
-        System.out.println("\n");
+        //System.out.println("\n");
     }
 
     public int[] newMapDimensions(){
@@ -115,11 +116,64 @@ public class Map {
     }
 
     public void doAllCommands(){
-        for (String command:commandArrayList){
-            commandDetails(command);
-            //TODO: Add checkMines logic to stop everything and pronounce failure
-            checkMines();
-            printMap();
+        int stepCount = 1; //initialize stepcount to first step. A step is an actual command (not iterate).
+        for(int i = 0; i < commandArrayList.size(); i++){
+
+            //get command
+            String command = commandArrayList.get(i);
+
+            //pre-command printing
+            if (command != "Increment") {
+                System.out.println("Step " + stepCount);
+                System.out.println();
+                printMap();
+                System.out.println();
+            }
+
+            commandDetails(command); //do the command
+
+            //should only print after an iterate step.
+            if (command != "Increment") {
+                System.out.print(command);
+                //checkMines returns true if we're all good, false if a mine was passed.
+                if (!checkMines()) {
+                    break; //breaks out of the for loop to end the process there and announce failure
+                }
+
+                //System.out.println(i+1 + " vs " + commandArrayList.size());
+                //check to see if next command is iterate or if this is the last command
+                //if there is another command to do after this one that is not iterate, do it and increase counter
+                //Needs to operate ONLY if the next command is not Iterate.
+                while( (i+1) != commandArrayList.size() && commandArrayList.get(i+1) != "Increment" ){
+                    i++;
+                    command = commandArrayList.get(i);
+                    commandDetails(command); //does the command without printing map yep
+                    //checkMines returns true if we're all good, false if a mine was passed.
+                    if (!checkMines()) {
+                        break; //breaks out of the for loop to end the process there and announce failure
+                    }
+                    System.out.print(" " + command);
+                }
+
+            } else { //will run this block if the step is Increment
+                stepCount++;
+
+                //print post-command map
+                System.out.println("\n");
+                printMap();
+                System.out.println();
+            }
+
+
+
+        }
+        //After all the commands are done, do scoring
+        int finalScore = scoreFile();
+        switch (finalScore){
+            case 0: System.out.println("Fail (0)");
+            break;
+            default: System.out.println("Pass (" + finalScore + ")");
+            break;
         }
     }
 
@@ -130,53 +184,59 @@ public class Map {
                         //ship moves up, all mines move down one relatively
                         for(Mine mine: mineArrayList) {
                             mine.incrementY();
+                            moves++;
                         }
                         break;
                     case "South":
                         //ship moves down, all mines move up one relatively
                         for(Mine mine: mineArrayList) {
                             mine.decrementY();
+                            moves++;
                         }
                         break;
                     case "East":
                         //ship moves right, all mines move left one relatively
                         for(Mine mine: mineArrayList) {
                             mine.decrementX();
+                            moves++;
                         }
                         break;
                     case "West":
                         //ship moves left, all mines move right one relatively
                         for(Mine mine: mineArrayList) {
                             mine.incrementX();
+                            moves++;
                         }
                         break;
 
                     case "Alpha":
                         for(int[] i: alpha){
                             destroyMines(i);
+                            shots++;
                         }
                         break;
                     case "Beta":
                         for(int[] i: beta){
                             destroyMines(i);
+                            shots++;
                         }
                         break;
                     case "Delta":
                         for(int[] i: delta){
                             destroyMines(i);
+                            shots++;
                         }
                         break;
                     case "Gamma":
                         for(int[] i: gamma){
                             destroyMines(i);
+                            shots++;
                         }
                         break;
 
                     //case for when a line of commands is done
                     case "Increment":
-                        for(Mine mine: mineArrayList) {
-                            mine.decrementZ();
-                        }
+                        decrementMines();
                         break;
         }
     }
@@ -190,27 +250,64 @@ public class Map {
         }
     }
 
-    //TODO Add logic for pass failure
     //Check mines for passed. Need further logic
-    public void checkMines(){
+    public boolean checkMines(){
         Boolean pass = true;
+
         for(Mine mine:mineArrayList){
             pass = mine.checkPassed();
             //System.out.println(Arrays.toString(mine.getCoords()));
             if(!pass){
-                System.out.println("FAILURE");
                 break;
             }
         }
 
+        return pass;
     }
-    //Do commands
+
+    public boolean checkAllDestroyed(){
+        Boolean pass = true;
+
+        for(Mine mine:mineArrayList){
+            pass = mine.destroyed;
+
+            if(!pass){ break;} //if a mine is false (not destroyed), break
+        }
+
+        return pass;
+    }
 
     //Decrement Z's of mines
     public void decrementMines(){
         for(Mine mine:mineArrayList){
             mine.decrementZ();
         }
+    }
+
+    public int scoreFile(){
+        int score = 10* mineArrayList.size();
+        if ( !checkMines() ){ //if a mine is passed, fail
+            score = 0;
+        } else if( !checkAllDestroyed() ){  //now check that all mines are destroyed
+            score = 0;
+        } else {
+            int shotsRemaining = 5*mineArrayList.size();
+            int movesRemaining = 3*mineArrayList.size();
+            //todo: add logic to stop the command process once all mines are destroyed, and notify scoreFile number of steps and if any are remaining
+            //scoring here
+
+            //shots fired = 5*number fired, up to 5 times number of mines
+            //compare shots to shotsRemaining and take the smaller one
+            int shotsPenalty = Math.min(shots,shotsRemaining)*5;
+            score -= shotsPenalty;
+            //moves done = 2*number moves, up to 3 times number of mines
+            //compare moves to movesRemaining and take the smaller one
+            int movesPenalty = Math.min(moves,movesRemaining)*2;
+            score -= movesPenalty;
+        }
+
+        return score;
+
     }
 
 
