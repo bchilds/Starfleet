@@ -53,7 +53,9 @@ public void testCenterShip() throws Exception {
 */ 
 @Test
 public void testGetCoords() throws Exception { 
-//tested as part of testSetCoords
+    Ship.setCoords(new int[] {2,7});
+    assertEquals(2,Ship.getCoords()[0]);
+    assertEquals(7,Ship.getCoords()[1]);
 } 
 
 

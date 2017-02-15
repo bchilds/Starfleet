@@ -18,18 +18,7 @@ public void before() throws Exception {
 
 @After
 public void after() throws Exception { 
-} 
-
-/** 
-* 
-* Method: createFields1() 
-* 
-*/ 
-@Test
-public void testCreateFields1() throws Exception {
-    fields1.add("z");
-    assertEquals(1,fields1.size());
-} 
+}
 
 /** 
 * 
@@ -38,7 +27,7 @@ public void testCreateFields1() throws Exception {
 */ 
 @Test
 public void testCreateFields2() throws Exception {
-    //contains three mines
+    //contains three mines for unit testing
     fields2.add("..c..");
     fields2.add("b....");
     fields2.add(".z...");
@@ -51,8 +40,11 @@ public void testCreateFields2() throws Exception {
 * 
 */ 
 @Test
-public void testLoadFiles() throws Exception { 
-//TODO: Test goes here... 
+public void testLoadFiles() throws Exception {
+    //Can't test with Scanner
+    //new Inputs();
+    // /Users/BChilds/Documents/workspace/Starfleet/src/starfleet/mapTest.txt
+    // /Users/BChilds/Documents/workspace/Starfleet/src/starfleet/commandTest.txt
 } 
 
 /** 
@@ -96,8 +88,9 @@ public void testGenerateMineList() throws Exception {
 @Test
 public void testGenerateCommandList() throws Exception { 
     ArrayList<String> testCommands = new Inputs().generateCommandList();
-    //testCommands currently should contain three commands: North, Increment, North
-    assertEquals(3,testCommands.size() );
+    //testCommands currently should contain three commands: Beta, North, Increment, Beta, Increment
+    assertEquals(5,testCommands.size() );
+    //cannot test rest due to needing input file from Scanner
 } 
 
 

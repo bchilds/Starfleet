@@ -138,8 +138,9 @@ public class MineTest {
     */
     @Test
     public void testGetCoords() throws Exception {
-        //tested as part of testSetCoords()
-
+       Mine testMine = new Mine(5,3,'d');
+       assertEquals(5,testMine.getCoords()[0]);
+       assertEquals(3,testMine.getCoords()[1]);
     }
 
     /**
