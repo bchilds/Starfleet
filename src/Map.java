@@ -298,11 +298,11 @@ public class Map {
             int movesRemaining = 3*mineArrayList.size();
             //shots fired = 5*number fired, up to 5 times number of mines
             //compare shots to shotsRemaining and take the smaller one
-            int shotsPenalty = Math.min(shots,shotsRemaining)*5;
+            int shotsPenalty = Math.min(5*shots,shotsRemaining);
             score -= shotsPenalty;
             //moves done = 2*number moves, up to 3 times number of mines
             //compare moves to movesRemaining and take the smaller one
-            int movesPenalty = Math.min(moves,movesRemaining)*2;
+            int movesPenalty = Math.min(3*moves,movesRemaining);
             score -= movesPenalty;
             if(extra){ //if there are extra moves, return a score of 1 regardless of other calculations
                 score = 1;
