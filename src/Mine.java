@@ -6,8 +6,7 @@ package starfleet;
 public class Mine {
     /*
     This class is a mine. Contains X, Y and Character (Z) integers, as well as a boolean for Destroyed.
-    If Z becomes 0 or -1 or whatever is the value before 'a' and destroyed is false, becomes a miss and script fails
-    Should contain a method to check given coordinates with the mine's own coordinate
+    If z becomes 0 before destroyed is true, becomes a miss and script fails
      */
     private int x;
     private int y;
@@ -43,11 +42,15 @@ public class Mine {
     }
 
     public void decrementZ(){
-        z--;
-        if (z > 26){
-            c = (char) (z + 38);
-        } else {
-            c = (char) (z + 96);
+        if (!destroyed) { //check for destroyed. We don't want to decrement destroyed mines and accidentally trigger fail
+            z--;
+            if (z > 26) {
+                c = (char) (z + 38);
+            } else if (z > 0){
+                c = (char) (z + 96);
+            } else {
+                c = '*';
+            }
         }
     }
 
@@ -70,6 +73,7 @@ public class Mine {
     public boolean checkPassed(){
         //false means that the mine has been passed, true means the mine is not yet passed
         if(this.z < 1){
+            c = '*';
             return false;
         } else {
             return true;
